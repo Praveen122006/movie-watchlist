@@ -1,0 +1,1 @@
+export default function SearchBar({value,onChange}){return <div className="search-box"><span>🔎</span><input value={value} onChange={e=>onChange(e.target.value)} placeholder="Search Movies" aria-label="Search movies"/></div>}

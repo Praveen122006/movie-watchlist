@@ -1,0 +1,2 @@
+const genres=['All Genres','Action','Comedy','Drama','Sci-Fi','Thriller','Romance','Animation','Biography'];
+export default function FilterBar({genre,status,onGenre,onStatus}){return <div className="filters"><label>Genre<select value={genre} onChange={e=>onGenre(e.target.value)}>{genres.map(g=><option key={g}>{g}</option>)}</select></label><label>Status<select value={status} onChange={e=>onStatus(e.target.value)}><option>All Movies</option><option>Watched</option><option>Not Watched</option></select></label></div>}

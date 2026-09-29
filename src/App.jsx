@@ -1,0 +1,8 @@
+import {useEffect,useState} from 'react';
+import {BrowserRouter,Routes,Route,useNavigate} from 'react-router-dom';
+import Navbar from './components/Navbar';import MovieDetails from './components/MovieDetails';import Dashboard from './pages/Dashboard';import Watchlist from './pages/Watchlist';import AddMovie from './pages/AddMovie';import {sampleMovies} from './data/sampleMovies';import './App.css';
+function AppContent(){const [movies,setMovies]=useState(()=>{try{const saved=localStorage.getItem('movieWatchlist_v2');return saved?JSON.parse(saved):sampleMovies}catch{return sampleMovies}});const [selected,setSelected]=useState(null);const nav=useNavigate();useEffect(()=>{localStorage.setItem('movieWatchlist_v2',JSON.stringify(movies))},[movies]);
+ const saveMovie=movie=>setMovies(prev=>prev.some(m=>m.id===movie.id)?prev.map(m=>m.id===movie.id?movie:m):[...prev,movie]);
+ const edit=movie=>nav('/add',{state:{movie}}); const remove=id=>{if(window.confirm('Are you sure you want to delete this movie?'))setMovies(prev=>prev.filter(m=>m.id!==id))};const toggle=id=>setMovies(prev=>prev.map(m=>m.id===id?{...m,status:m.status==='Watched'?'Not Watched':'Watched'}:m));const handlers={onView:setSelected,onEdit:edit,onDelete:remove,onToggle:toggle};
+ return <><Navbar/><Routes><Route path="/" element={<Dashboard movies={movies} handlers={handlers}/>}/><Route path="/watchlist" element={<Watchlist movies={movies} handlers={handlers}/>}/><Route path="/add" element={<AddMovie onSave={saveMovie}/>}/></Routes><MovieDetails movie={selected} onClose={()=>setSelected(null)} onEdit={m=>{setSelected(null);edit(m)}}/></>}
+export default function App(){return <BrowserRouter><AppContent/></BrowserRouter>}
